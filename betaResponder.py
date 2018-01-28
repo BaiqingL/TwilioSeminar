@@ -1,10 +1,10 @@
 from flask import Flask, request, redirect
 from twilio.twiml.messaging_response import MessagingResponse
 from random import randint
-import time
 
 app = Flask(__name__)
 
+#Jokes array, J1 is the first section and J2 is the second response
 j1 = ["Why do cows have hooves instead of feet?", "If I bought a balloon for $0.99..."]
 j2 = ["Because they lactose", "how much should I sell it for when I adjust for inflation?"]
 
@@ -48,6 +48,7 @@ def incoming_sms():
         del prev[i][:]
         
     else:
+        #Just in case the bot doesn't understand
         rsp(i, resp, "I didn't understand '" + actualmsg + "' my programmer hasn't taught me that yet")
 
     print(prev[i])
