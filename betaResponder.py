@@ -53,7 +53,7 @@ def incoming_sms():
     # Determine the right reply for this message
 
     if body == 'hello' or body == 'hi':
-        rsp(i, resp, "Hello there! What is your name?")
+        rsp(i, resp, "Hi! What is your name?")
     elif prev[i][len(prev[i]) - 1] == "Hi! What is your name?":
         rsp(i, resp, "Nice to meet you " + actualmsg + ". I am a chatbot. How are you doing?")
     elif "How are you doing?" in prev[i][len(prev[i]) - 1]:
@@ -66,10 +66,12 @@ def incoming_sms():
     elif body == "what is the news?":
         rsp(i, resp, allheadlines[0])
         rsp(i, resp, "Do you want me to keep going?")
-            if "yes" in body or "y" in body:
-                rsp(i, resp, allheadlines[1])
-            else:
-                rsp(i, resp, "Ok, today was pretty boring I guess")
+    elif "Do you want me to keep going?" in prev[i][len(prev[i]) - 1]:
+        if "yes" in body or "y" in body or "sure" in body:
+            rsp(i, resp, allheadlines[1])
+        else:
+            rsp(i, resp, "Ok, today was boring I guess")
+
     elif body == "tell me a joke":
         j = randint(0, len(j1) - 1)
         rsp(i, resp, j1[j])
