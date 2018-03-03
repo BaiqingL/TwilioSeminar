@@ -65,7 +65,7 @@ def incoming_sms():
             rsp(i, resp, "That's ok, I guess!")
     elif body == "what is the news?":
         rsp(i, resp, allheadlines[0])
-        rsp(i, resp, "Do you want me to keep going?)
+        rsp(i, resp, "Do you want me to keep going?")
             if "yes" in body or "y" in body:
                 rsp(i, resp, allheadlines[1])
             else:
