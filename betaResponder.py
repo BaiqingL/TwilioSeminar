@@ -1,15 +1,38 @@
-from flask import Flask, request, redirect
+from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 from random import randint
+import feedparser
 
 app = Flask(__name__)
 
-#Jokes array, J1 is the first section and J2 is the second response
+
+def parseRSS(rss_url):
+    return feedparser.parse(rss_url)
+
+
+def getHeadlines(rss_url):
+    headlines = []
+    feed = parseRSS(rss_url)
+    for newsitem in feed['items']:
+        headlines.append(newsitem['title'])
+    return headlines
+
+
+allheadlines = []
+
+
+newsurls = {'local': 'http://wellesley.wickedlocal.com/sports/high-school?template=rss&mime=xml'}
+for key, url in newsurls.items():
+    # Call getHeadlines() and combine the returned headlines with allheadlines
+    allheadlines.extend(getHeadlines(url))
+
+# Jokes array, J1 is the first section and J2 is the second response
 j1 = ["Why do cows have hooves instead of feet?", "If I bought a balloon for $0.99..."]
 j2 = ["Because they lactose", "how much should I sell it for when I adjust for inflation?"]
 
 persons = []
 prev = []
+
 
 @app.route("/sms", methods=['GET', 'POST'])
 def incoming_sms():
@@ -28,6 +51,11 @@ def incoming_sms():
     resp = MessagingResponse()
 
     # Determine the right reply for this message
+    if body == 'What is the news?':
+        rsp(i, resp, allheadlines)
+
+
+
     if body == 'hello' or body == 'hi':
         rsp(i, resp, "Hi! What is your name?")
     elif prev[i][len(prev[i]) - 1] == "Hi! What is your name?":
@@ -46,18 +74,20 @@ def incoming_sms():
     elif body == 'bye':
         rsp(i, resp, "Goodbye! I will forget what you just said.")
         del prev[i][:]
-        
+
     else:
-        #Just in case the bot doesn't understand
+        # Just in case the bot doesn't understand
         rsp(i, resp, "I didn't understand '" + actualmsg + "' my programmer hasn't taught me that yet")
 
     print(prev[i])
 
     return str(resp)
 
+
 def rsp(i, resp, ins):
     prev[i].append(ins)
     resp.message(ins)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
