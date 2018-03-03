@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, redirect
 from twilio.twiml.messaging_response import MessagingResponse
 from random import randint
 import feedparser
@@ -51,10 +51,6 @@ def incoming_sms():
     resp = MessagingResponse()
 
     # Determine the right reply for this message
-    if body == 'What is the news?':
-        rsp(i, resp, allheadlines)
-
-
 
     if body == 'hello' or body == 'hi':
         rsp(i, resp, "Hi! What is your name?")
@@ -67,6 +63,8 @@ def incoming_sms():
             rsp(i, resp, "I'm sad to hear that!")
         else:
             rsp(i, resp, "That's ok, I guess!")
+    elif body == 'What is the news?':
+        rsp(i, resp, allheadlines)
     elif body == "tell me a joke":
         j = randint(0, len(j1) - 1)
         rsp(i, resp, j1[j])
