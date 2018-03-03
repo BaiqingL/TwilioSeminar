@@ -63,7 +63,7 @@ def incoming_sms():
             rsp(i, resp, "I'm sad to hear that!")
         else:
             rsp(i, resp, "That's ok, I guess!")
-    elif body == 'What is the news?':
+    elif body == "what is the news?":
         rsp(i, resp, allheadlines)
     elif body == "tell me a joke":
         j = randint(0, len(j1) - 1)
