@@ -69,9 +69,8 @@ def incoming_sms():
     except:
         rsp(i, resp, str(chatbot.get_response(actualmsg)))
     print(prev[i])
-    
-    return str(resp)
 
+    return str(resp)
 
 def rsp(i, resp, ins):
     prev[i].append(ins)
